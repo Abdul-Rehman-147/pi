@@ -21,6 +21,7 @@ import type { AzureOpenAIResponsesOptions } from "./azure-openai-responses.ts";
 import type { GoogleOptions } from "./google.ts";
 import type { GoogleVertexOptions } from "./google-vertex.ts";
 import type { MistralOptions } from "./mistral.ts";
+import type { OllamaOptions } from "./ollama.ts";
 import type { OpenAICodexResponsesOptions } from "./openai-codex-responses.ts";
 import type { OpenAICompletionsOptions } from "./openai-completions.ts";
 import type { OpenAIResponsesOptions } from "./openai-responses.ts";
@@ -221,6 +222,10 @@ const openAICompletionsProvider = createLazyApiProvider<"openai-completions", Op
 	"openai-completions",
 	() => import("./openai-completions.ts"),
 );
+const ollamaProvider = createLazyApiProvider<"openai-completions", OllamaOptions>(
+	"openai-completions",
+	() => import("./ollama.ts"),
+);
 const openAIResponsesProvider = createLazyApiProvider<"openai-responses", OpenAIResponsesOptions>(
 	"openai-responses",
 	() => import("./openai-responses.ts"),
@@ -249,12 +254,15 @@ export const streamOpenAICodexResponses = openAICodexResponsesProvider.stream;
 export const streamSimpleOpenAICodexResponses = openAICodexResponsesProvider.streamSimple;
 export const streamOpenAICompletions = openAICompletionsProvider.stream;
 export const streamSimpleOpenAICompletions = openAICompletionsProvider.streamSimple;
+export const streamOllama = ollamaProvider.stream;
+export const streamSimpleOllama = ollamaProvider.streamSimple;
 export const streamOpenAIResponses = openAIResponsesProvider.stream;
 export const streamSimpleOpenAIResponses = openAIResponsesProvider.streamSimple;
 
 const registerBuiltInApiProviderFunctions = [
 	() => registerApiProvider(anthropicProvider),
 	() => registerApiProvider(openAICompletionsProvider),
+	() => registerApiProvider(ollamaProvider),
 	() => registerApiProvider(mistralProvider),
 	() => registerApiProvider(openAIResponsesProvider),
 	() => registerApiProvider(azureOpenAIResponsesProvider),

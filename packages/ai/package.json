@@ -42,6 +42,10 @@
 			"types": "./dist/providers/openai-codex-responses.d.ts",
 			"import": "./dist/providers/openai-codex-responses.js"
 		},
+		"./ollama": {
+			"types": "./dist/providers/ollama.d.ts",
+			"import": "./dist/providers/ollama.js"
+		},
 		"./openai-completions": {
 			"types": "./dist/providers/openai-completions.d.ts",
 			"import": "./dist/providers/openai-completions.js"

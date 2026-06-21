@@ -6921,6 +6921,44 @@ export const MODELS = {
 			maxTokens: 131072,
 		} satisfies Model<"openai-completions">,
 	},
+	"ollama": {
+		"llama3.1:8b": {
+			id: "llama3.1:8b",
+			name: "llama3.1:8b",
+			api: "openai-completions",
+			provider: "ollama",
+			baseUrl: "http://localhost:11434/v1",
+			compat: {"supportsStore":false,"supportsDeveloperRole":false,"supportsReasoningEffort":false,"maxTokensField":"max_tokens","supportsStrictMode":false,"supportsLongCacheRetention":false},
+			reasoning: false,
+			input: ["text"],
+			cost: {
+				input: 0,
+				output: 0,
+				cacheRead: 0,
+				cacheWrite: 0,
+			},
+			contextWindow: 8192,
+			maxTokens: 4096,
+		} satisfies Model<"openai-completions">,
+		"qwen2.5-coder:14b": {
+			id: "qwen2.5-coder:14b",
+			name: "qwen2.5-coder:14b",
+			api: "openai-completions",
+			provider: "ollama",
+			baseUrl: "http://localhost:11434/v1",
+			compat: {"supportsStore":false,"supportsDeveloperRole":false,"supportsReasoningEffort":false,"maxTokensField":"max_tokens","supportsStrictMode":false,"supportsLongCacheRetention":false},
+			reasoning: false,
+			input: ["text"],
+			cost: {
+				input: 0,
+				output: 0,
+				cacheRead: 0,
+				cacheWrite: 0,
+			},
+			contextWindow: 8192,
+			maxTokens: 4096,
+		} satisfies Model<"openai-completions">,
+	},
 	"openai": {
 		"gpt-4": {
 			id: "gpt-4",
@@ -9657,7 +9695,7 @@ export const MODELS = {
 				cacheRead: 0.2,
 				cacheWrite: 0.375,
 			},
-			contextWindow: 131072,
+			contextWindow: 65536,
 			maxTokens: 32768,
 		} satisfies Model<"openai-completions">,
 		"google/gemini-3.1-flash-lite": {
@@ -9845,7 +9883,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 32768,
+			maxTokens: 8192,
 		} satisfies Model<"openai-completions">,
 		"ibm-granite/granite-4.1-8b": {
 			id: "ibm-granite/granite-4.1-8b",
@@ -9947,8 +9985,8 @@ export const MODELS = {
 				cacheRead: 0.06,
 				cacheWrite: 0,
 			},
-			contextWindow: 262144,
-			maxTokens: 144000,
+			contextWindow: 256000,
+			maxTokens: 80000,
 		} satisfies Model<"openai-completions">,
 		"liquid/lfm-2.5-1.2b-thinking:free": {
 			id: "liquid/lfm-2.5-1.2b-thinking:free",
@@ -10169,7 +10207,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 1048576,
-			maxTokens: 4096,
+			maxTokens: 512000,
 		} satisfies Model<"openai-completions">,
 		"mistralai/codestral-2508": {
 			id: "mistralai/codestral-2508",
@@ -10505,7 +10543,7 @@ export const MODELS = {
 			cost: {
 				input: 0.6,
 				output: 2.5,
-				cacheRead: 0.6,
+				cacheRead: 0,
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
@@ -10544,7 +10582,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 262142,
+			maxTokens: 65535,
 		} satisfies Model<"openai-completions">,
 		"moonshotai/kimi-k2.7-code": {
 			id: "moonshotai/kimi-k2.7-code",
@@ -10884,7 +10922,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 1047576,
-			maxTokens: 4096,
+			maxTokens: 32768,
 		} satisfies Model<"openai-completions">,
 		"openai/gpt-4.1-nano": {
 			id: "openai/gpt-4.1-nano",
@@ -10914,7 +10952,7 @@ export const MODELS = {
 			cost: {
 				input: 2.5,
 				output: 10,
-				cacheRead: 1.25,
+				cacheRead: 0,
 				cacheWrite: 0,
 			},
 			contextWindow: 128000,
@@ -11050,11 +11088,11 @@ export const MODELS = {
 			cost: {
 				input: 0.25,
 				output: 2,
-				cacheRead: 0.03,
+				cacheRead: 0.025,
 				cacheWrite: 0,
 			},
 			contextWindow: 400000,
-			maxTokens: 4096,
+			maxTokens: 128000,
 		} satisfies Model<"openai-completions">,
 		"openai/gpt-5-nano": {
 			id: "openai/gpt-5-nano",
@@ -11118,11 +11156,11 @@ export const MODELS = {
 			cost: {
 				input: 1.25,
 				output: 10,
-				cacheRead: 0.125,
+				cacheRead: 0.13,
 				cacheWrite: 0,
 			},
 			contextWindow: 128000,
-			maxTokens: 16384,
+			maxTokens: 32000,
 		} satisfies Model<"openai-completions">,
 		"openai/gpt-5.1-codex": {
 			id: "openai/gpt-5.1-codex",
@@ -11209,7 +11247,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 128000,
-			maxTokens: 32000,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"openai/gpt-5.2-codex": {
 			id: "openai/gpt-5.2-codex",
@@ -12422,11 +12460,11 @@ export const MODELS = {
 			cost: {
 				input: 0.14,
 				output: 1,
-				cacheRead: 0.05,
+				cacheRead: 0,
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 81920,
+			maxTokens: 262144,
 		} satisfies Model<"openai-completions">,
 		"qwen/qwen3.5-397b-a17b": {
 			id: "qwen/qwen3.5-397b-a17b",
@@ -12459,8 +12497,8 @@ export const MODELS = {
 				cacheRead: 0,
 				cacheWrite: 0,
 			},
-			contextWindow: 256000,
-			maxTokens: 32768,
+			contextWindow: 262144,
+			maxTokens: 262144,
 		} satisfies Model<"openai-completions">,
 		"qwen/qwen3.5-flash-02-23": {
 			id: "qwen/qwen3.5-flash-02-23",
@@ -13034,11 +13072,11 @@ export const MODELS = {
 			cost: {
 				input: 0.98,
 				output: 3.08,
-				cacheRead: 0.182,
+				cacheRead: 0.49,
 				cacheWrite: 0,
 			},
 			contextWindow: 202752,
-			maxTokens: 4096,
+			maxTokens: 65535,
 		} satisfies Model<"openai-completions">,
 		"z-ai/glm-5.2": {
 			id: "z-ai/glm-5.2",
@@ -13175,7 +13213,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 262142,
+			maxTokens: 65535,
 		} satisfies Model<"openai-completions">,
 		"~openai/gpt-latest": {
 			id: "~openai/gpt-latest",

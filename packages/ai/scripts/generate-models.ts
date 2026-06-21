@@ -1436,6 +1436,67 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 	}
 }
 
+const OLLAMA_COMPAT: OpenAICompletionsCompat = {
+	supportsStore: false,
+	supportsDeveloperRole: false,
+	supportsReasoningEffort: false,
+	maxTokensField: "max_tokens",
+	supportsStrictMode: false,
+	supportsLongCacheRetention: false,
+};
+
+const OLLAMA_VISION_FAMILIES = new Set(["llava", "moondream", "bakllava", "minicpm-v"]);
+const OLLAMA_REASONING_FAMILIES = new Set(["deepseek-r1", "qwq", "qwen3"]);
+
+interface OllamaTagsResponse {
+	models: Array<{
+		name: string;
+		details?: {
+			family?: string;
+		};
+	}>;
+}
+
+async function fetchOllamaModels(): Promise<Model<Api>[]> {
+	if (process.env.PI_NO_LOCAL_LLM) return [];
+
+	const host = (process.env.OLLAMA_HOST ?? "http://localhost:11434").replace(/\/$/, "");
+	const baseUrl = `${host}/v1`;
+
+	try {
+		const response = await fetch(`${host}/api/tags`);
+		if (!response.ok) return [];
+		const data = (await response.json()) as OllamaTagsResponse;
+		const models: Model<Api>[] = [];
+
+		for (const m of data.models ?? []) {
+			const id = m.name;
+			const family = (m.details?.family ?? "").toLowerCase();
+			const baseName = id.split(":")[0].toLowerCase();
+			const isVision = OLLAMA_VISION_FAMILIES.has(baseName) || OLLAMA_VISION_FAMILIES.has(family);
+			const isReasoning = OLLAMA_REASONING_FAMILIES.has(baseName) || OLLAMA_REASONING_FAMILIES.has(family);
+			models.push({
+				id,
+				name: id,
+				api: "openai-completions",
+				provider: "ollama",
+				baseUrl,
+				compat: OLLAMA_COMPAT,
+				reasoning: isReasoning,
+				input: isVision ? ["text", "image"] : ["text"],
+				cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+				contextWindow: 8192,
+				maxTokens: 4096,
+			});
+		}
+
+		console.log(`  ollama: ${models.length} models`);
+		return models;
+	} catch {
+		return [];
+	}
+}
+
 async function generateModels() {
 	// Fetch models from both sources
 	// models.dev: Anthropic, Google, OpenAI, Groq, Cerebras
@@ -1444,9 +1505,10 @@ async function generateModels() {
 	const modelsDevModels = await loadModelsDevData();
 	const openRouterModels = await fetchOpenRouterModels();
 	const aiGatewayModels = await fetchAiGatewayModels();
+	const ollamaModels = await fetchOllamaModels();
 
 	// Combine models (models.dev has priority)
-	const allModels = [...modelsDevModels, ...openRouterModels, ...aiGatewayModels].filter(
+	const allModels = [...modelsDevModels, ...openRouterModels, ...aiGatewayModels, ...ollamaModels].filter(
 		(model) =>
 			!((model.provider === "opencode" || model.provider === "opencode-go") && model.id === "gpt-5.3-codex-spark"),
 	);
@@ -2088,7 +2150,8 @@ async function generateModels() {
 	}
 
 	// Group by provider and deduplicate by model ID
-	const providers: Record<string, Record<string, Model<any>>> = {};
+	// Always include "ollama" so KnownProvider index is satisfied even when no local models are found.
+	const providers: Record<string, Record<string, Model<any>>> = { ollama: {} };
 	for (const model of allModels) {
 		if (!providers[model.provider]) {
 			providers[model.provider] = {};

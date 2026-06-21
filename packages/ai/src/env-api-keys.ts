@@ -153,6 +153,10 @@ export function getEnvApiKey(provider: string, env?: ProviderEnv): string | unde
 		}
 	}
 
+	if (provider === "ollama") {
+		return "<authenticated>";
+	}
+
 	if (provider === "amazon-bedrock") {
 		// Amazon Bedrock supports multiple credential sources:
 		// 1. AWS_PROFILE - named profile from ~/.aws/credentials
